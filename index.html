@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overpath - Your AI Deal Coach for Modern Sales Teams</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0e27;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .neural-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #1e90ff, transparent);
+            top: -100px;
+            left: -100px;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #4169e1, transparent);
+            bottom: -150px;
+            right: -150px;
+            animation-delay: 5s;
+        }
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, #00bfff, transparent);
+            top: 50%;
+            right: 20%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            33% { transform: translate(50px, -50px); }
+            66% { transform: translate(-50px, 50px); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(30, 144, 255, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1e90ff, #4169e1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .logo-icon svg {
+            width: 28px;
+            height: 28px;
+            z-index: 1;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #1e90ff;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #1e90ff, #4169e1);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(30, 144, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(30, 144, 255, 0.5);
+        }
+
+        .hero {
+            padding: 120px 0 80px;
+            text-align: center;
+        }
+
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(30, 144, 255, 0.1);
+            border: 1px solid rgba(30, 144, 255, 0.3);
+            padding: 10px 24px;
+            border-radius: 50px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #1e90ff;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: #1e90ff;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+        }
+
+        h1 {
+            font-size: 72px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #ffffff, #1e90ff, #4169e1);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 8s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            font-size: 22px;
+            color: #a0aec0;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 80px;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #1e90ff, #4169e1);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 12px;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 30px rgba(30, 144, 255, 0.4);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(30, 144, 255, 0.6);
+        }
+
+        .secondary-btn {
+            background: rgba(30, 144, 255, 0.1);
+            color: #1e90ff;
+            padding: 18px 40px;
+            border-radius: 12px;
+            border: 1px solid rgba(30, 144, 255, 0.3);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .secondary-btn:hover {
+            background: rgba(30, 144, 255, 0.2);
+            border-color: rgba(30, 144, 255, 0.5);
+        }
+
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-tag {
+            color: #1e90ff;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .section-desc {
+            font-size: 20px;
+            color: #a0aec0;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .why-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(30, 144, 255, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.3s;
+        }
+
+        .why-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(30, 144, 255, 0.5);
+            box-shadow: 0 20px 60px rgba(30, 144, 255, 0.2);
+        }
+
+        .why-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.2), rgba(65, 105, 225, 0.2));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            font-size: 28px;
+        }
+
+        .why-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .why-desc {
+            color: #a0aec0;
+            line-height: 1.6;
+        }
+
+        .how-steps {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 50px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1e90ff, #4169e1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .step-content h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .step-content p {
+            color: #a0aec0;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(30, 144, 255, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(30, 144, 255, 0.5);
+            box-shadow: 0 20px 60px rgba(30, 144, 255, 0.2);
+        }
+
+        .feature-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.2), rgba(65, 105, 225, 0.2));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: #1e90ff;
+        }
+
+        .feature-title {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .feature-desc {
+            color: #a0aec0;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .personas {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .persona-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(30, 144, 255, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .persona-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(30, 144, 255, 0.5);
+            box-shadow: 0 20px 60px rgba(30, 144, 255, 0.2);
+        }
+
+        .persona-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.2), rgba(65, 105, 225, 0.2));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 36px;
+        }
+
+        .persona-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .persona-desc {
+            color: #a0aec0;
+            line-height: 1.6;
+        }
+
+        .vision-section {
+            background: rgba(30, 144, 255, 0.05);
+            border: 1px solid rgba(30, 144, 255, 0.2);
+            border-radius: 32px;
+            padding: 80px 60px;
+            text-align: center;
+            margin: 100px 0;
+        }
+
+        .vision-title {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .vision-text {
+            font-size: 22px;
+            color: #a0aec0;
+            line-height: 1.7;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 100px 0;
+        }
+
+        .cta-title {
+            font-size: 52px;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .cta-subtitle {
+            font-size: 20px;
+            color: #a0aec0;
+            margin-bottom: 40px;
+        }
+
+        .molly-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(30, 144, 255, 0.15);
+            border: 1px solid rgba(30, 144, 255, 0.4);
+            padding: 12px 28px;
+            border-radius: 50px;
+            margin-bottom: 30px;
+            font-size: 16px;
+            color: #1e90ff;
+            font-weight: 600;
+        }
+
+        @media (max-width: 968px) {
+            h1 { font-size: 48px; }
+            .section-title { font-size: 36px; }
+            .why-grid, .personas { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="neural-bg">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <div class="container">
+        <nav>
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="10" fill="white"/>
+                        <circle cx="8" cy="20" r="2" fill="#00bfff"/>
+                        <circle cx="32" cy="20" r="2" fill="#00bfff"/>
+                        <circle cx="20" cy="8" r="2" fill="#1e90ff"/>
+                        <circle cx="20" cy="32" r="2" fill="#1e90ff"/>
+                        <line x1="13" y1="20" x2="10" y2="20" stroke="white" stroke-width="2" opacity="0.4"/>
+                        <line x1="27" y1="20" x2="30" y2="20" stroke="white" stroke-width="2" opacity="0.4"/>
+                        <line x1="20" y1="13" x2="20" y2="10" stroke="white" stroke-width="2" opacity="0.4"/>
+                        <line x1="20" y1="27" x2="20" y2="30" stroke="white" stroke-width="2" opacity="0.4"/>
+                    </svg>
+                </div>
+                <span>Overpath</span>
+            </div>
+            <div class="nav-links">
+                <a href="#why">Why Overpath</a>
+                <a href="#how">How It Works</a>
+                <a href="#features">Features</a>
+                <a href="#vision">Vision</a>
+                <button class="cta-button">Request Demo</button>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div class="ai-badge">
+                <div class="pulse-dot"></div>
+                Meet Molly, Your AI Deal Coach
+            </div>
+            <h1>Your AI Deal Coach for<br>Modern Sales Teams</h1>
+            <p class="subtitle">
+                Overpath helps sales reps and managers review, prepare, and improve deals — powered by AI insights grounded in the MEDDICC framework.
+            </p>
+            <div class="hero-buttons">
+                <button class="primary-btn">See Molly in Action</button>
+                <button class="secondary-btn">Join Early Access</button>
+            </div>
+        </section>
+
+        <section class="section" id="value">
+            <div class="section-header">
+                <div class="section-tag">Value Proposition</div>
+                <h2 class="section-title">Turn Conversations Into Intelligence</h2>
+                <p class="section-desc">
+                    Overpath transforms how sales teams analyze pipeline, coach reps, and forecast deals by turning your call transcripts, CRM data, and notes into actionable deal intelligence — automatically.
+                </p>
+            </div>
+        </section>
+
+        <section class="section" id="why">
+            <div class="section-header">
+                <div class="section-tag">Why Overpath</div>
+                <h2 class="section-title">Insights Buried, Opportunities Lost</h2>
+                <p class="section-desc">
+                    Sales conversations are full of insight — but buried in notes, transcripts, and CRM fields. Overpath makes it effortless to uncover what matters.
+                </p>
+            </div>
+            <div class="why-grid">
+                <div class="why-card">
+                    <div class="why-icon">📖</div>
+                    <h3 class="why-title">Capture the Story</h3>
+                    <p class="why-desc">Every deal has a narrative. Overpath automatically captures and structures the story behind every deal so nothing gets lost.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">⚠️</div>
+                    <h3 class="why-title">Spot Risks Early</h3>
+                    <p class="why-desc">Identify qualification gaps and deal risks before they cost you the quarter. Get alerts on what needs attention now.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">🎯</div>
+                    <h3 class="why-title">Coach with Consistency</h3>
+                    <p class="why-desc">Scale your coaching impact with AI-powered guidance that's clear, consistent, and grounded in proven sales methodology.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="how">
+            <div class="section-header">
+                <div class="section-tag">How It Works</div>
+                <h2 class="section-title">Four Steps to Better Deals</h2>
+            </div>
+            <div class="how-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Connect Your Tools</h3>
+                        <p>Seamlessly integrate your CRM, call recordings, and email threads. Overpath works with your existing workflow.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Molly Reviews Your Deals</h3>
+                        <p>Your AI deal coach automatically analyzes every deal using proven MEDDICC logic, extracting insights from every conversation.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Get Instant Insights</h3>
+                        <p>Receive qualification gap analysis, next-step recommendations, and win/loss pattern insights tailored to each deal.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Act and Improve</h3>
+                        <p>Take action directly within your existing workflow through CRM integration, email, or our Chrome extension.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="features">
+            <div class="section-header">
+                <div class="section-tag">Core Features</div>
+                <h2 class="section-title">Built for Revenue Teams</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 11l3 3L22 4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">AI Deal Reviews</h3>
+                    </div>
+                    <p class="feature-desc">Automated MEDDICC-based analysis after every call. Molly identifies what's working, what's missing, and what to do next.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Pipeline Health Scores</h3>
+                    </div>
+                    <p class="feature-desc">Identify weak or stalled deals instantly with real-time health scoring based on deal signals and engagement patterns.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="9" cy="7" r="4" stroke-width="2"/>
+                                <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Coaching Summaries</h3>
+                    </div>
+                    <p class="feature-desc">Personalized guidance for reps and managers. Scale your coaching impact without scaling headcount.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                                <path d="M12 6v6l4 2" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Action Tracking</h3>
+                    </div>
+                    <p class="feature-desc">Suggested next steps automatically synced back to your CRM. Never miss a follow-up or critical action item.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2"/>
+                                <path d="M9 3v18M15 3v18M3 9h18M3 15h18" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Chrome Extension</h3>
+                    </div>
+                    <p class="feature-desc">Review deals and take action from anywhere. Access Molly's insights without leaving your workflow.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 3v18h18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M7 16l4-8 4 4 4-8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Win/Loss Intelligence</h3>
+                    </div>
+                    <p class="feature-desc">Understand patterns across your pipeline. Learn what separates wins from losses to replicate success.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div class="section-tag">Designed For</div>
+                <h2 class="section-title">Every Role in Revenue</h2>
+            </div>
+            <div class="personas">
+                <div class="persona-card">
+                    <div class="persona-icon">👤</div>
+                    <h3 class="persona-title">Sales Reps</h3>
+                    <p class="persona-desc">Close smarter with clarity on what matters most in every deal. Know exactly what to do next.</p>
+                </div>
+                <div class="persona-card">
+                    <div class="persona-icon">👥</div>
+                    <h3 class="persona-title">Sales Managers</h3>
+                    <p class="persona-desc">Scale coaching without scaling headcount. Give every rep personalized guidance that drives results.</p>
+                </div>
+                <div class="persona-card">
+                    <div class="persona-icon">📊</div>
+                    <h3 class="persona-title">Revenue Leaders</h3>
+                    <p class="persona-desc">Forecast with confidence backed by real deal data. See pipeline health at a glance.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="vision-section" id="vision">
+            <div class="section-tag">Our Vision</div>
+            <h2 class="vision-title">The AI Operating System for Commercial Teams</h2>
+            <p class="vision-text">
+                Overpath is building the AI operating system for commercial teams — where data, context, and action come together to drive consistent growth. A connective layer that makes every deal smarter, every coach more effective, and every forecast more accurate.
+            </p>
+        </div>
+
+        <section class="cta-section">
+            <div class="molly-badge">
+                <div class="pulse-dot"></div>
+                Meet Molly
+            </div>
+            <h2 class="cta-title">See Molly in Action</h2>
+            <p class="cta-subtitle">Join our early access program and transform how your team closes deals</p>
+            <button class="primary-btn">Request Demo</button>
+        </section>
+    </div>
+
+    <script>
+        // Smooth hover animations
+        const cards = document.querySelectorAll('.why-card, .feature-card, .persona-card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
